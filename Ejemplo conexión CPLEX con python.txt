@@ -1,0 +1,132 @@
+CONECTAR CPLEX CON PYTHON (Para Mac):
+
+Requisitos:
+1)Tener instalado Cplex (IBM ILOG CPLEX XX.XX)
+2)Tener instalado Anaconda
+
+Recomendación: Leer todo antes de empezar el proceso.
+
+Disclaimer: Es muy importante tener en consideración tu versión de CPLEX, debido a que este sólo será compatible
+	con algunas versiones de python (ejemplo python 2.7, python 3.6)
+		Esto lo puedes ver luego de la instación, en la carpeta:
+
+			/Applications/CPLEX_StudioXXXX/cplex/python/
+			
+			o
+
+			/Applications/CPLEX_Studio_CommunityXXXX/cplex/python/
+
+			donde XXXX es la versión de tu cplex, por ejemplo, yo tengo dos Cplexs: CPLEX 12.10
+			y CPLEX 12.8; luego veo las versiones de python compatibles en las carpetas:
+
+				CPLEX 12.8 :
+				Ver carpeta /Applications/CPLEX_Studio128/cplex/python/
+					-2.7
+					-3.5
+					-3.6
+
+				CPLEX 12.10 :
+				Ver carpeta /Applications/CPLEX_Studio_Community1210/cplex/python/
+					-3.6
+					-3.7
+
+	Para esta explicación supondremos utilizar CPLEX 12.8 y python 3.5!
+
+Pasos:
+1)Crear ambiente especial para CPLEX 12.8 con versión python 3.5:
+	-)Abrir un Terminal (Ir al Launchpad -> Otras -> Terminal)
+	Si no tienes creado un ambiente especial para CPLEX en Anaconda:
+		-)Escribir: conda create -n py35 python=3.5
+			py35 será el nombre del ambiente creado, puedes cambiar por el nombre que gustes
+		-)Escribir: conda activate py35
+			por default python abre en el ambiente base o root, pero nosotros queremos
+				entrar en nuestra ambiente recien creado, en este caso con el comando
+				"conda active ENVIROMENT", donde ENVIROMENT es el nombre del ambiente a
+				activar
+
+2)Ubicar archivo setup.py:
+	-)Este archivo se encuentra en la dirección donde cplex esta instalado. Es sumamente importante porque
+		este archivo genera las pautas internas para poder usar cplex por medio de python.
+	
+	-)Esta se debería encontrar en la dirección:
+		/Applications/CPLEX_Studio128/cplex/python/3.5/x86-64_osx/
+		para la versión CPLEX 12.8, para otras versiones seguir misma indicación que en Disclaimer.
+
+	-)El siguiente paso es indicarle al terminal que directorio queremos abrir, para esto usamos el comando
+		cd (change directory), escribiendo en Terminal: cd /Applications/CPLEX_Studio128/cplex/python/3.5/x86-64_osx/
+		
+		Si no conoces como navegar en terminal los comandos más útiles son:
+		cd directorio: cambia al directorio indicado
+		ls: muestra las carpetas y archivos que se encuentran en ese directorio
+		pwd: indica el directorio actual
+
+		Otros comandos útiles a saber:
+		cd .. : vuelve al dirección superior, ejemplo si estamos en /Applications/CPLEX_Studio_Community1210/cplex/python/ y aplicamos "cd ..", subimos a  /Applications/CPLEX_Studio_Community1210/cplex/
+		ls -l: muestra las carpetas y archivos en formato lista
+
+3)Instalar CPLEX en python:
+	-)Éste es el último paso, tan solo falta escribir en terminal lo siguiente:
+		python setup.py install
+
+		Recuerda que debes estar en la carpeta donde se encuentra el archivo setup.py (En nuestro caso /Applications/CPLEX_Studio128/cplex/python/3.5/x86-64_osx/).
+
+		Se demorará un par de segundos y luego se completará.
+		Con este paso ya estás listo para poder utilizar python con CPLEX.
+
+Y LISTO. 
+Si tienes problemas, copia el/los error/es que aparezcan en Terminal y enviamelos!
+
+4) Extra: Tests
+	-)Si deseas hacer una prueba rápida podrás encontrar algunos ejemplos en la carpeta:
+		
+		/Applications/CPLEX_Studio128/cplex/examples/src/python/
+		
+		donde encontrarás un listado extenso de ejemplos de cómo utilizar CPLEX, si quieres probar uno rapidamente sólo debes cambiar directorio actual y ejecutarlo de esta manera:
+
+			#Asegurate que estes en el ambiente correcto:
+			conda activate py35
+			#cambia directorio
+			cd /Applications/CPLEX_Studio128/cplex/examples/src/python/
+			#Ejecuta
+			python steel.py
+
+			Deberías obtener una salida como está:
+
+			CPXPARAM_Read_DataCheck                          1
+			Tried aggregator 1 time.
+			LP Presolve eliminated 3 rows and 6 columns.
+			Aggregator did 1 substitutions.
+			Reduced LP has 11 rows, 23 columns, and 36 nonzeros.
+			Presolve time = 0.01 sec. (0.01 ticks)
+
+			Iteration log . . .
+			Iteration:     1   Dual objective     =       1030050.000000
+			Solution status =  1
+			Total Profit = 515033.0
+
+				p	t	Make	Inv	Sell
+				0	0	0.0	10.0	0.0
+				0	1	5990.0	0.0	6000.0
+				0	2	6000.0	0.0	6000.0
+				0	3	1400.0	0.0	1400.0
+				0	4	2000.0	0.0	2000.0
+				1	0	0.0	0.0	0.0
+				1	1	1407.0	1100.0	307.0
+				1	2	1400.0	0.0	2500.0
+				1	3	3500.0	0.0	3500.0
+				1	4	4200.0	0.0	4200.0
+
+			Cuidado! 
+			Muchos de estos ejemplos son más complejos y piden argumentos para ejecutarlos, por lo que puede que te aparezcan mensajes como: 
+
+			#ejecutamos
+			python lpex1.py
+			
+			#Error! Faltan argumentos
+			Usage: mipex1.py -X
+		   	where X is one of the following options:
+		      r          generate problem by row
+		      c          generate problem by column
+		      n          generate problem by nonzero
+
+		    Para utilizarlos podrás leer más al respecto en la documentación que se encuentre en la página de IBM ILOG CPLEX!
